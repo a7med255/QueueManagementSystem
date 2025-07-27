@@ -26,6 +26,7 @@ namespace QueueManagementSystem.Infrastructure.Persistence
         public DbSet<Counter> Counters { get; set; }
         public DbSet<Branch> Branches { get; set; }
         public DbSet<TicketHistoryLog> TicketHistoryLogs { get; set; }
+
         // Define DbSet properties for your entities
         // public DbSet<YourEntity> YourEntities { get; set; }
 
