@@ -27,6 +27,7 @@ namespace QueueManagementSystem.Infrastructure.Services
                 : doneTickets.Average(ticket => (ticket.StartedAt ?? ticket.CreatedAt) - ticket.CreatedAt)
                     .TotalMinutes;
 
+
             var peakHour = tickets
                 .GroupBy(ticket => ticket.CreatedAt.Hour)
                 .OrderByDescending(group => group.Count())

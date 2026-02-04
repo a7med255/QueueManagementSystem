@@ -18,6 +18,7 @@ namespace QueueManagementSystem.API.Seed
             QueueDbContext dbContext = scope.ServiceProvider.GetRequiredService<QueueDbContext>();
             RoleManager<IdentityRole> roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             UserManager<ApplicationUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
             ILogger logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("SeedData");
 
             await dbContext.Database.MigrateAsync();
@@ -115,6 +116,7 @@ namespace QueueManagementSystem.API.Seed
                 IsOpen = true
             });
             await dbContext.SaveChangesAsync();
+
         }
     }
 }
