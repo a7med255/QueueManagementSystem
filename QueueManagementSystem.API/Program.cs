@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using QueueManagementSystem.API.Hubs;
+using QueueManagementSystem.API.Seed;
+
 using QueueManagementSystem.API.Services;
 using QueueManagementSystem.Application.Interfaces;
 using QueueManagementSystem.Domain.Entities;
@@ -83,6 +85,8 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
+
+await SeedData.InitializeAsync(app.Services);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

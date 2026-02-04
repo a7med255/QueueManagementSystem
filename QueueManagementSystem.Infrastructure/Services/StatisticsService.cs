@@ -24,8 +24,9 @@ namespace QueueManagementSystem.Infrastructure.Services
             var doneTickets = tickets.Where(ticket => ticket.Status == TicketStatus.Done).ToList();
             double averageWait = doneTickets.Count == 0
                 ? 0
-                : doneTickets.Average(ticket =>
-                    (ticket.StartedAt ?? ticket.CreatedAt).Subtract(ticket.CreatedAt).TotalMinutes);
+                : doneTickets.Average(ticket => (ticket.StartedAt ?? ticket.CreatedAt) - ticket.CreatedAt)
+                    .TotalMinutes;
+
 
             var peakHour = tickets
                 .GroupBy(ticket => ticket.CreatedAt.Hour)
