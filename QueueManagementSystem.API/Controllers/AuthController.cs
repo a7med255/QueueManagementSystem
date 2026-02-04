@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using QueueManagementSystem.Application.DTOs.Auth;
 using QueueManagementSystem.Domain.Entities;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace QueueManagementSystem.API.Controllers
 {

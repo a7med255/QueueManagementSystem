@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using QueueManagementSystem.API.Hubs;
-using QueueManagementSystem.API.Seed;
 using QueueManagementSystem.API.Services;
 using QueueManagementSystem.Application.Interfaces;
 using QueueManagementSystem.Domain.Entities;
@@ -64,7 +63,7 @@ builder.Services.AddSwaggerGen(options =>
         Description = "JWT Authorization header using the Bearer scheme.",
         Name = "Authorization",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
+        Type = SecuritySchemeType.Http,
         Scheme = "Bearer"
     });
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -84,8 +83,6 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
-
-await SeedData.InitializeAsync(app.Services);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
