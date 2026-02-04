@@ -24,4 +24,8 @@
     <ProjectReference Include="..\QueueManagementSystem.Domain\QueueManagementSystem.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\QueueManagementSystem.Domain\QueueManagementSystem.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
