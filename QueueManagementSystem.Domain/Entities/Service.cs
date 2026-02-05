@@ -11,8 +11,11 @@ namespace QueueManagementSystem.Domain.Entities
         public int Id { get; set; }
         public string ServiceName { get; set; }
         public int AvgServiceTime { get; set; }
+        public bool IsOpen { get; set; }
+        public int? BranchId { get; set; }
 
         // Navigation
+        public Branch Branch { get; set; }
         public ICollection<Ticket> Tickets { get; set; }
     }
 }

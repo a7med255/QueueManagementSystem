@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QueueManagementSystem.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using QueueManagementSystem.Infrastructure.Persistence;
 namespace QueueManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(QueueDbContext))]
-    partial class QueueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250801090000_UpdateQueueSchema")]
+    partial class UpdateQueueSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -490,16 +493,6 @@ namespace QueueManagementSystem.Infrastructure.Migrations
                     b.Navigation("Service");
                 });
 
-            modelBuilder.Entity("QueueManagementSystem.Domain.Entities.Service", b =>
-                {
-                    b.HasOne("QueueManagementSystem.Domain.Entities.Branch", "Branch")
-                        .WithMany()
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Branch");
-                });
-
             modelBuilder.Entity("QueueManagementSystem.Domain.Entities.TicketHistoryLog", b =>
                 {
                     b.HasOne("QueueManagementSystem.Domain.Entities.Ticket", "Ticket")
@@ -509,6 +502,16 @@ namespace QueueManagementSystem.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Ticket");
+                });
+
+            modelBuilder.Entity("QueueManagementSystem.Domain.Entities.Service", b =>
+                {
+                    b.HasOne("QueueManagementSystem.Domain.Entities.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Branch");
                 });
 
             modelBuilder.Entity("QueueManagementSystem.Domain.Entities.Branch", b =>
