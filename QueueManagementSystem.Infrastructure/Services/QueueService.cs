@@ -11,11 +11,13 @@ namespace QueueManagementSystem.Infrastructure.Services
     {
         private readonly QueueDbContext _context;
         private readonly IQueueNotifier _notifier;
+        private readonly ISmsNotifier _smsNotifier;
 
-        public QueueService(QueueDbContext context, IQueueNotifier notifier)
+        public QueueService(QueueDbContext context, IQueueNotifier notifier, ISmsNotifier smsNotifier)
         {
             _context = context;
             _notifier = notifier;
+            _smsNotifier = smsNotifier;
         }
 
         public async Task<TicketDto> CreateTicketAsync(string customerId, CreateTicketRequestDto request)
@@ -53,6 +55,7 @@ namespace QueueManagementSystem.Infrastructure.Services
 
             await _notifier.NotifyQueueUpdatedAsync(request.ServiceId, request.BranchId);
             await _notifier.NotifyTicketUpdatedAsync(ticket.Id, request.ServiceId, request.BranchId);
+            await SendTicketCreatedNotificationAsync(request.PhoneNumber, customerId, ticket, service.ServiceName);
 
             return await MapTicketAsync(ticket.Id);
         }
@@ -148,6 +151,7 @@ namespace QueueManagementSystem.Infrastructure.Services
             await _context.SaveChangesAsync();
             await _notifier.NotifyQueueUpdatedAsync(request.ServiceId, request.BranchId);
             await _notifier.NotifyTicketUpdatedAsync(ticket.Id, request.ServiceId, request.BranchId);
+            await SendTicketCalledNotificationAsync(ticket, ticket.ServiceId, ticket.BranchId);
 
             return await MapTicketAsync(ticket.Id);
         }
@@ -254,6 +258,50 @@ namespace QueueManagementSystem.Infrastructure.Services
                 EstimatedWaitTime = ticket.EstimatedWaitTime,
                 PositionInQueue = position
             };
+        }
+
+        private async Task SendTicketCreatedNotificationAsync(string phoneNumber, string customerId, Ticket ticket, string serviceName)
+        {
+            string resolvedPhone = phoneNumber;
+            if (string.IsNullOrWhiteSpace(resolvedPhone) && !string.IsNullOrWhiteSpace(customerId))
+            {
+                resolvedPhone = await _context.Users
+                    .Where(user => user.Id == customerId)
+                    .Select(user => user.PhoneNumber)
+                    .FirstOrDefaultAsync();
+            }
+
+            if (string.IsNullOrWhiteSpace(resolvedPhone))
+            {
+                return;
+            }
+
+            await _smsNotifier.SendTicketCreatedAsync(resolvedPhone, ticket.TicketNumber, serviceName, ticket.EstimatedWaitTime);
+        }
+
+        private async Task SendTicketCalledNotificationAsync(Ticket ticket, int serviceId, int branchId)
+        {
+            if (string.IsNullOrWhiteSpace(ticket.CustomerId))
+            {
+                return;
+            }
+
+            string phoneNumber = await _context.Users
+                .Where(user => user.Id == ticket.CustomerId)
+                .Select(user => user.PhoneNumber)
+                .FirstOrDefaultAsync();
+
+            if (string.IsNullOrWhiteSpace(phoneNumber))
+            {
+                return;
+            }
+
+            string serviceName = await _context.Services
+                .Where(service => service.Id == serviceId)
+                .Select(service => service.ServiceName)
+                .FirstOrDefaultAsync();
+
+            await _smsNotifier.SendTicketCalledAsync(phoneNumber, ticket.TicketNumber, serviceName ?? "Service");
         }
     }
 }

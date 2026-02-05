@@ -6,7 +6,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using QueueManagementSystem.API.Hubs;
 using QueueManagementSystem.API.Seed;
-
 using QueueManagementSystem.API.Services;
 using QueueManagementSystem.Application.Interfaces;
 using QueueManagementSystem.Domain.Entities;
@@ -50,6 +49,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IServiceCatalogService, ServiceCatalogService>();
 builder.Services.AddScoped<IQueueService, QueueService>();
 builder.Services.AddScoped<IStatisticsService, StatisticsService>();
+builder.Services.AddScoped<ISmsNotifier, SmsNotifier>();
 builder.Services.AddSingleton<IQueueNotifier, SignalRQueueNotifier>();
 
 builder.Services.AddSignalR();
