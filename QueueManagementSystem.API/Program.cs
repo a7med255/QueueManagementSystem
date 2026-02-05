@@ -6,7 +6,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using QueueManagementSystem.API.Hubs;
 using QueueManagementSystem.API.Seed;
-
 using QueueManagementSystem.API.Services;
 using QueueManagementSystem.Application.Interfaces;
 using QueueManagementSystem.Domain.Entities;
@@ -50,6 +49,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IServiceCatalogService, ServiceCatalogService>();
 builder.Services.AddScoped<IQueueService, QueueService>();
 builder.Services.AddScoped<IStatisticsService, StatisticsService>();
+builder.Services.AddScoped<ISmsNotifier, SmsNotifier>();
 builder.Services.AddSingleton<IQueueNotifier, SignalRQueueNotifier>();
 
 builder.Services.AddSignalR();
@@ -60,13 +60,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "Smart Queue Management API", Version = "v1" });
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    options.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme.",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
-        Scheme = "Bearer"
+        Scheme = "bearer"
     });
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -76,7 +76,7 @@ builder.Services.AddSwaggerGen(options =>
                 Reference = new OpenApiReference
                 {
                     Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
+                    Id = "bearer"
                 }
             },
             new string[] { }

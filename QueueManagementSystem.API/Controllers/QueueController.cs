@@ -19,7 +19,7 @@ namespace QueueManagementSystem.API.Controllers
 
         [HttpPost("tickets")]
         [Authorize]
-        public async Task<ActionResult<TicketDto>> CreateTicket(CreateTicketRequestDto request)
+        public async Task<ActionResult<TicketDto>> CreateTicket( CreateTicketRequestDto request)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue(ClaimTypes.Name);
             TicketDto ticket = await _queueService.CreateTicketAsync(userId, request);
