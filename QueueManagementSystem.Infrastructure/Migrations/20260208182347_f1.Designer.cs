@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QueueManagementSystem.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using QueueManagementSystem.Infrastructure.Persistence;
 namespace QueueManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(QueueDbContext))]
-    partial class QueueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260208182347_f1")]
+    partial class f1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -295,6 +298,7 @@ namespace QueueManagementSystem.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool>("IsOpen")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
@@ -306,7 +310,8 @@ namespace QueueManagementSystem.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BranchId", "ServiceName")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[BranchId] IS NOT NULL");
 
                     b.ToTable("Services");
                 });
@@ -325,12 +330,13 @@ namespace QueueManagementSystem.Infrastructure.Migrations
                     b.Property<int?>("CounterId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CustomerId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("EndedAt")
                         .HasColumnType("datetime2");
@@ -372,6 +378,7 @@ namespace QueueManagementSystem.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("ChangedAt")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
@@ -497,16 +504,6 @@ namespace QueueManagementSystem.Infrastructure.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("Service");
-                });
-
-            modelBuilder.Entity("QueueManagementSystem.Domain.Entities.Service", b =>
-                {
-                    b.HasOne("QueueManagementSystem.Domain.Entities.Branch", "Branch")
-                        .WithMany()
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Branch");
                 });
 
             modelBuilder.Entity("QueueManagementSystem.Domain.Entities.TicketHistoryLog", b =>
