@@ -11,8 +11,8 @@ using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace QueueManagementSystem.API.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("api/auth")]
     public class AuthController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;

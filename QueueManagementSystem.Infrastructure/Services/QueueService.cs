@@ -27,13 +27,12 @@ namespace QueueManagementSystem.Infrastructure.Services
             {
                 return null;
             }
-
-            int nextNumber = await _context.Tickets
+            int maxTicketNumber = await _context.Tickets
                 .Where(ticket => ticket.ServiceId == request.ServiceId && ticket.BranchId == request.BranchId)
-                .Select(ticket => ticket.TicketNumber)
-                .DefaultIfEmpty(0)
-                .MaxAsync() + 1;
-
+                .OrderByDescending(ticket => ticket.TicketNumber)
+               .Select(ticket => ticket.TicketNumber)
+                .FirstOrDefaultAsync();
+            int nextNumber = maxTicketNumber + 1;
             int waitingCount = await _context.Tickets.CountAsync(ticket =>
                 ticket.ServiceId == request.ServiceId &&
                 ticket.BranchId == request.BranchId &&

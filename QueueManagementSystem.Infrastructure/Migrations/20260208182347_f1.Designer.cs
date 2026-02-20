@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QueueManagementSystem.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using QueueManagementSystem.Infrastructure.Persistence;
 namespace QueueManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(QueueDbContext))]
-    partial class QueueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260208182347_f1")]
+    partial class f1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
