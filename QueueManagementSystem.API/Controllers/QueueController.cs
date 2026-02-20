@@ -41,7 +41,7 @@ namespace QueueManagementSystem.API.Controllers
         }
 
         [HttpGet("services/{serviceId:int}/branches/{branchId:int}")]
-        [AllowAnonymous]
+        [Authorize]
         public async Task<ActionResult<QueueStatusDto>> GetQueue(int serviceId, int branchId)
         {
             QueueStatusDto queue = await _queueService.GetQueueAsync(serviceId, branchId);
