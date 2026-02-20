@@ -15,6 +15,7 @@ namespace QueueManagementSystem.Domain.Entities
         public int ServiceId { get; set; }
         public int BranchId { get; set; }
         public int? CounterId { get; set; }
+        public string? CustomerId { get; set; }
 
         public TicketStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }
@@ -26,5 +27,6 @@ namespace QueueManagementSystem.Domain.Entities
         public Service Service { get; set; }
         public Branch Branch { get; set; }
         public Counter Counter { get; set; }
+        public ApplicationUser? Customer { get; set; }
     }
 }
