@@ -6,8 +6,8 @@ using System.Security.Claims;
 
 namespace QueueManagementSystem.API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/queue")]
     public class QueueController : ControllerBase
     {
         private readonly IQueueService _queueService;
@@ -19,19 +19,10 @@ namespace QueueManagementSystem.API.Controllers
 
         [HttpPost("tickets")]
         [Authorize]
-        public async Task<ActionResult<TicketDto>> CreateTicket( CreateTicketRequestDto request)
+        public async Task<ActionResult<TicketDto>> CreateTicket(CreateTicketRequestDto request)
         {
-
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue(ClaimTypes.Name);
-
-            if (string.IsNullOrEmpty(userId))
-                return Unauthorized();
-
             TicketDto ticket = await _queueService.CreateTicketAsync(userId, request);
-
             if (ticket == null)
             {
                 return BadRequest("Service is closed or unavailable.");
@@ -41,7 +32,7 @@ namespace QueueManagementSystem.API.Controllers
         }
 
         [HttpGet("services/{serviceId:int}/branches/{branchId:int}")]
-        [Authorize]
+        [AllowAnonymous]
         public async Task<ActionResult<QueueStatusDto>> GetQueue(int serviceId, int branchId)
         {
             QueueStatusDto queue = await _queueService.GetQueueAsync(serviceId, branchId);

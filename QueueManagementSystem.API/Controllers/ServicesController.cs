@@ -5,8 +5,8 @@ using QueueManagementSystem.Application.Interfaces;
 
 namespace QueueManagementSystem.API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/services")]
     public class ServicesController : ControllerBase
     {
         private readonly IServiceCatalogService _serviceCatalogService;

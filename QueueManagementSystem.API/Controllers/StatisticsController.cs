@@ -5,8 +5,8 @@ using QueueManagementSystem.Application.Interfaces;
 
 namespace QueueManagementSystem.API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/statistics")]
     public class StatisticsController : ControllerBase
     {
         private readonly IStatisticsService _statisticsService;
